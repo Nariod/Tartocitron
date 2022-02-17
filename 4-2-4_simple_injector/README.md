@@ -1,5 +1,11 @@
 # SimpleInjector
 
+## Internals
+Win32 API used:
+* VirtualAlloc 
+* CreateThread
+* WaitForSingleObject
+
 
 ## How to use
 Cross-compile from Linux: 
@@ -8,11 +14,6 @@ Cross-compile from Linux:
 - change the shellcode in "main.rs"
 - `cargo build --release --target x86_64-pc-windows-gnu`
 
-## Internals
-Win32 API used:
-* VirtualAlloc 
-* CreateThread
-* WaitForSingleObject
 
 ## Overview
-Works, but is sometimes detected by Windows Defender when executed.
+Works, but is sometimes detected by Windows Defender when executed. Binary final size is ~1,6Mo.
