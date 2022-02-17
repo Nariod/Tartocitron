@@ -1,5 +1,5 @@
 # Tartocitron
-Tartocitron is a repo to have fun with OSEP concepts and the Nim language.
+Tartocitron is a repo to have fun with OSEP concepts and the Rust language.
 
 ## But, why?
 I have spare time.
