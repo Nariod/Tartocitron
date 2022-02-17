@@ -2,14 +2,17 @@
 
 
 ## How to use
-WIP
+Cross-compile from Linux: 
+- `git clone https://github.com/Nariod/Tartocitron.git`
+- `cd 4-2-4_simple_injector`
+- change the shellcode in "main.rs"
+- `cargo build --release --target x86_64-pc-windows-gnu`
 
 ## Internals
 Win32 API used:
 * VirtualAlloc 
-* WriteProcessMemory
 * CreateThread
 * WaitForSingleObject
 
 ## Overview
-Works, but is detected by Windows Defender as time of writing.
+Works, but is sometimes detected by Windows Defender when executed.
