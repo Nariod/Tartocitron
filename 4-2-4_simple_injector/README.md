@@ -16,4 +16,4 @@ Cross-compile from Linux:
 
 
 ## Overview
-Works, but is sometimes detected by Windows Defender when executed. Binary final size is ~1,6Mo.
+Works, but is sometimes detected by Windows Defender when executed (Last test on 17/02/22). Binary final size is ~1,6Mo.
