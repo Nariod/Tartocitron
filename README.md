@@ -8,7 +8,7 @@ I have spare time.
 https://www.rust-lang.org/tools/install
 
 ## Meterpreter rc file
-All tests presented here have been performed with a meterpreter shellcode + handler. The MSF rc file is shared in this repo.
+All tests presented here have been performed with a meterpreter shellcode + msf handler. The MSF rc file is shared in this repo.
 
 ## Credits
 * https://github.com/trickster0/OffensiveRust

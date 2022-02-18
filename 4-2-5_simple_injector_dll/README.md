@@ -14,7 +14,7 @@ Cross-compile from Linux:
 - change the shellcode in "lib.rs"
 - `cargo build --release --target x86_64-pc-windows-gnu`
 On target machine:
-- `rundll32.exe .\simple_injector_dll.dll, main`
+- `rundll32.exe simple_injector_dll.dll, main`
 
 
 ## Overview
