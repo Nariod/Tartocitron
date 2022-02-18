@@ -1,0 +1,20 @@
+[package]
+name = "simple_injector_dll"
+version = "0.1.0"
+edition = "2021"
+author = "Nariod"
+
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+winapi = {version="0.3.9", features=["memoryapi", "processthreadsapi", "synchapi"]}
+
+[lib]
+crate-type = ["cdylib"]
+
+[profile.release]
+opt-level = "z"
+lto = true
+codegen-units = 1
+panic = "abort"
