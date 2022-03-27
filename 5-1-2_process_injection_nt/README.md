@@ -8,6 +8,7 @@ Win32 API used:
 * NtUnmapViewOfSection
 * NtClose
 * NtCreateThreadEx
+All these APIs are supported by ntapi Rust crate.
 
 
 ## How to use

