@@ -14,7 +14,7 @@ Cross-compile from Linux:
 - `cd 5-1-2_process_injection`
 - change the shellcode in "main.rs"
 - `cargo build --release --target x86_64-pc-windows-gnu`
-
+- WIP : compile works great on Windows, but not cross compilation from Linux
 
 ## Overview
-Works, not flagged by Windows Defender (last test on 19/02/22). Binary final size is ~1,9Mo.
+Works, not flagged by Windows Defender (last test on 27/03/22). Binary final size is ~360Ko.
