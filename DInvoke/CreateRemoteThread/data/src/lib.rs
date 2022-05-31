@@ -4,7 +4,6 @@ use bindings::Windows::Win32::{Foundation::{BOOL, HANDLE, HINSTANCE, PSTR}, Secu
 use winapi::shared::{ntdef::LARGE_INTEGER, minwindef::LPVOID, minwindef::LPCVOID};
 use winapi::um::minwinbase::LPSECURITY_ATTRIBUTES;
 use winapi::um::minwinbase::LPTHREAD_START_ROUTINE;
-use windows::Win32::Foundation::PAPCFUNC;
 
 pub type PVOID = *mut c_void;
 pub type DWORD = u32;
@@ -42,8 +41,6 @@ pub type VirtualAllocEx = unsafe extern "system" fn (HANDLE, LPVOID, usize, u32,
 pub type WriteProcessMemory = unsafe extern "system" fn (HANDLE, LPVOID, LPCVOID, usize, *mut usize) -> BOOL;
 pub type VirtualProtectEx = unsafe extern "system" fn (HANDLE, LPVOID, usize, u32, *mut u32) -> BOOL;
 pub type CreateRemoteThread = unsafe extern "system" fn (HANDLE, LPSECURITY_ATTRIBUTES, usize, LPTHREAD_START_ROUTINE, LPVOID, usize, *mut usize) -> HANDLE;
-pub type OpenThread = unsafe extern "system" fn (u32, BOOL, u32) -> HANDLE;
-pub type QueueUserAPC = unsafe extern "system" fn (PAPCFUNC, HANDLE, usize) -> u32;
 
 pub const DLL_PROCESS_DETACH: u32 = 0;
 pub const DLL_PROCESS_ATTACH: u32 = 1;

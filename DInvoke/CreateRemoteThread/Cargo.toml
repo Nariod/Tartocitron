@@ -20,7 +20,6 @@ libaes = "0.6"
 itertools = "0.10"
 sysinfo = "0.23.11"
 litcrypt = "0.3"
-remoteprocess = "0.4.9"
 
 [dependencies.windows]
 version = "0.37"
