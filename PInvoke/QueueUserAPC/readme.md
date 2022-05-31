@@ -1,17 +1,19 @@
-# CreateRemoteThread
+# QueueUserAPC
 
 ## Internals
 Win32 API used:
 * OpenProcess 
 * VirtualAllocEx
 * WriteProcessMemory
-* CreateRemoteThread
+* OpenThread
+* VirtualProtectEx
+* QueueUserAPC
 
 
 ## How to use
 This project uses the official "windows" crate, compiling from Windows is recommended. 
 - `git clone https://github.com/Nariod/Tartocitron.git`
-- `cd PInvoke/CreateRemoteThread`
+- `cd PInvoke/QueueUserAPC`
 - use the "aes_encryption_decryption" tool in this repo to create an AES encrypted shellcode
 - change the shellcode in "main.rs"
 - `cargo build --release`

@@ -10,7 +10,7 @@ Win32 API used:
 ## How to use
 Cross-compile from Linux: 
 - `git clone https://github.com/Nariod/Tartocitron.git`
-- `cd CreateThread_dll`
+- `cd PInvoke/CreateThread_dll`
 - change the shellcode in "lib.rs"
 - `cargo build --release --target x86_64-pc-windows-gnu`
 On target machine:
