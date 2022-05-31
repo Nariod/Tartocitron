@@ -9,13 +9,13 @@ Win32 API used:
 
 
 ## How to use
-Cross-compile from Linux: 
+This project uses the official "windows" crate, compiling from Windows is recommended. 
 - `git clone https://github.com/Nariod/Tartocitron.git`
 - `cd CreateRemoteThread`
 - use the "aes_encryption_decryption" tool in this repo to create an AES encrypted shellcode
 - change the shellcode in "main.rs"
-- `cargo build --release --target x86_64-pc-windows-gnu`
+- `cargo build --release`
 
 
 ## Overview
-Works, not flagged by Windows Defender (last test on 19/02/22). Binary final size is ~1,9Mo.
+Works, not flagged by Windows Defender (last test on 31/05/22). Binary final size is ~3Mo.
