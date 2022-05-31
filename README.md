@@ -1,5 +1,5 @@
 # Tartocitron
-Tartocitron is a repo to have fun with malwares and the Rust language.
+Tartocitron is a repo to have fun with malwares and the Rust language. This repo provides working examples of dropper written in Rust.
 
 ## But, why?
 I have spare time.
