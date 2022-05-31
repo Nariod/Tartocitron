@@ -1,16 +1,19 @@
 # Tartocitron
-Tartocitron is a repo to have fun with OSEP concepts and the Rust language.
+Tartocitron is a repo to have fun with malwares and the Rust language.
 
 ## But, why?
 I have spare time.
 
-## Install Rust on Linux
+## Install Rust on Windows
 https://www.rust-lang.org/tools/install
 
 ## Meterpreter rc file
-All tests presented here have been performed with a meterpreter shellcode + msf handler. The MSF rc file is shared in this repo.
+All tests presented here have been performed with a meterpreter shellcode + msf handler. The MSF rc file used is shared in this repo.
 
 ## Credits
+* Special thanks to MemN0ps ofr his amazing repos: https://github.com/memN0ps
+* Huge thanks to the Rust community which is always here to help :)
+* Thanks to https://github.com/Kudaes/DInvoke_rs for his super nice tool
 * https://github.com/trickster0/OffensiveRust
 * https://github.com/byt3bl33d3r/OffensiveNim
 

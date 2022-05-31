@@ -1,3 +1,5 @@
+// this is a Rust port from the C# OSEP code
+
 use winapi::um::memoryapi::VirtualAlloc;
 use winapi::um::processthreadsapi::CreateThread;
 use winapi::um::synchapi::WaitForSingleObject;

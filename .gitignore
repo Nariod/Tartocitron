@@ -1,5 +1,5 @@
 *.rs.bk
-Cargo.lock
-*exe
-*elf
-*/target/
+*Cargo.lock
+*.exe
+*.elf
+*target*
