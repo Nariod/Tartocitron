@@ -12,6 +12,7 @@ Win32 API used:
 Cross-compile from Linux: 
 - `git clone https://github.com/Nariod/Tartocitron.git`
 - `cd CreateRemoteThread`
+- use the "aes_encryption_decryption" tool in this repo to create an AES encrypted shellcode
 - change the shellcode in "main.rs"
 - `cargo build --release --target x86_64-pc-windows-gnu`
 
